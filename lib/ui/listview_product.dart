@@ -25,7 +25,7 @@ class _ListViewProductState extends State<ListViewProduct> {
     super.initState();
     items = new List();
     _onProductAddedSubscription = productReference.onChildAdded.listen(_onProductAdded);
-    _onProductChangedSubscription = productReference.onChildAdded.listen(_onProductChanged);
+    _onProductChangedSubscription = productReference.onChildAdded.listen(_onProductUpdate);
 
   }
 
@@ -93,10 +93,57 @@ class _ListViewProductState extends State<ListViewProduct> {
             },
           ),
         ),
-
-      )
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add, color: Colors.white,),
+          backgroundColor: Colors.deepOrangeAccent,
+          onPressed: () => _createNewProduct(context),
+      ),
+    ),
     );
+  }
 
+  void _onProductAdded(Event event)
+  {
+    setState(() {
+      items.add(new Product.fromSnapShot(event.snapshot));
+    });
+  }
 
+  void _onProductUpdate(Event event)
+  {
+    var oldProductValue = items.singleWhere((product) => product.id == event.snapshot.key);
+
+    setState(() {
+      items[items.indexOf(oldProductValue)] = new Product.fromSnapShot(event.snapshot);
+    });
+  }
+
+  void _deleteProduct(
+      BuildContext context, Product product, int position) async {
+    await productReference.child(product.id).remove().then((_) {
+      setState(() {
+        items.removeAt(position);
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
+  void _navigateToProductInformation(BuildContext context, Product product) async{
+    await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProductScreen(product)),
+    );
+  }
+
+  void _navigateToProduct(BuildContext context, Product product) async
+  {
+    await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProductInformation(product)),
+    );
+  }
+
+  void _createNewProduct(BuildContext context) async{
+    await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProdcutScreen(product(null, '', '','',''))),
+    );
   }
 }
