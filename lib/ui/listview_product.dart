@@ -75,7 +75,8 @@ class _ListViewProductState extends State<ListViewProduct> {
                               color: Colors.blueGrey,
                               fontSize: 21.0,
                             )
-                        )
+                        ),
+                        ),
                       ],
                     ),
                 onTap: ()=> _navigateToProductInformation(context, items[position]),
@@ -85,7 +86,7 @@ class _ListViewProductState extends State<ListViewProduct> {
                           onPressed: () => _deleteProduct(context, items[position], position)),
                         IconButton(
                           icon: Icon(Icons.edit, color: Colors.blueAccent,),
-                          onPressed: () => _navigateToProduct(context, items[position], position)),
+                          onPressed: () => _navigateToProduct(context, items[position])),
                         ],
                       ),
                   ],
@@ -143,7 +144,7 @@ class _ListViewProductState extends State<ListViewProduct> {
 
   void _createNewProduct(BuildContext context) async{
     await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProdcutScreen(product(null, '', '','',''))),
+            MaterialPageRoute(builder: (context) => ProductScreen(Product(null, '', '','','',''))),
     );
   }
 }
